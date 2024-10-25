@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:robu/info_pages/panel.dart';
 import 'lists.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,6 +16,13 @@ class _Info_homeState extends State<Info_home>
     with TickerProviderStateMixin {
   late final AnimationController animationController;
   Future<void>? _launched;
+
+  void navigateTo(Widget screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
+  }
 
   Future<void> _Bor(Uri url) async {
     if (!await launchUrl(
@@ -66,10 +74,7 @@ class _Info_homeState extends State<Info_home>
       //   MaterialPageRoute(builder: (context) => blood_bank()),
       // );
     } else if (category.title == 'panel') {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => robu_panel()),
-      // );
+      navigateTo(Panel(),);
     }
     else if (category.title == 'Regestration') {
       // Navigator.push(

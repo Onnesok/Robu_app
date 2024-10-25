@@ -14,6 +14,13 @@ class HomeContents extends StatefulWidget {
 class _HomeContentsState extends State<HomeContents> {
   CategoryType categoryType = CategoryType.Controller;
 
+  void navigateTo(Widget screen) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

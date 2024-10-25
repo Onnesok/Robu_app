@@ -30,6 +30,31 @@ class AppTheme {
     bodySmall: caption,
   );
 
+  /// title green for course enrollment page
+  static const TextStyle title_green = TextStyle(
+    fontSize: 16,
+    color: Colors.green,
+    fontWeight: FontWeight.w500,
+    overflow: TextOverflow.ellipsis,
+  );
+
+  static TextStyle body_grey = TextStyle(
+    color: Colors.grey,
+    fontWeight: FontWeight.bold,
+    fontSize: 16,
+    overflow: TextOverflow.ellipsis,
+  );
+
+  ////// Header green for course enroll page
+  static TextStyle header_green = TextStyle(
+    color: Colors.green,
+    fontWeight: FontWeight.normal,
+    fontSize: 18,
+    letterSpacing: 1,
+    fontFamily: "anton",
+    overflow: TextOverflow.ellipsis,
+  );
+
   static const TextStyle display1 = TextStyle(
     fontFamily: fontName,
     fontWeight: FontWeight.bold,
@@ -97,4 +122,5 @@ class AppTheme {
     letterSpacing: 0.2,
     color: lightText,
   );
+
 }

@@ -33,6 +33,7 @@ class _AboutScreenState extends State<AboutScreen> {
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         title: Text("About Robu", style: TextStyle(color: Colors.black87)),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -148,117 +149,78 @@ class _AboutScreenState extends State<AboutScreen> {
                   ),
                 ),
               ),
-              ///////////////////////////// Departments Section  /////////////////////////////////
-              ListView.builder(
-                padding: EdgeInsets.all(16.0),
-                itemCount: departments.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final department = departments[index];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          offset: Offset(0, 4),
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        if (department.imagePath != null)
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child:Image.asset(
-                              department.imagePath!,
-                              //height: MediaQuery.of(context).size.height * 0.2,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                      ],
-                    ),
-                  );
-                },
-              ),
 
               // Profiles Section
-              ListView.builder(
-                padding: EdgeInsets.all(16.0),
-                itemCount: profiles.length,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final profile = profiles[index];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          //offset: Offset(0, 4),
-                          //blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        if (profile.imagePath != null)
-                          ClipOval(
-                            child: Image.asset(
-                              profile.imagePath!,
-                              height: 120,
-                              width: 120,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'About Developer\n${profile.name}',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        if (profile.description != null) ...[
-                          const SizedBox(height: 16),
-                          Text(
-                            profile.description!,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ],
-                        const SizedBox(height: 30),
-                        Text(
-                          '(${profile.name})',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(fontSize: 20, color: Colors.blueGrey),
-                        ),
-                        const SizedBox(height: 20),
-                        if (profile.profileUrl != null)
-                          ElevatedButton(
-                            onPressed: () => setState(() {
-                              _launched = _abouturl(profile.profileUrl!);
-                            }),
-                            child: const Text('See more about me'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                            ),
-                          ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+              // ListView.builder(
+              //   padding: EdgeInsets.all(16.0),
+              //   itemCount: profiles.length,
+              //   shrinkWrap: true,
+              //   physics: NeverScrollableScrollPhysics(),
+              //   itemBuilder: (context, index) {
+              //     final profile = profiles[index];
+              //     return Container(
+              //       margin: const EdgeInsets.only(bottom: 16.0),
+              //       decoration: BoxDecoration(
+              //         color: Colors.white,
+              //         borderRadius: BorderRadius.circular(12.0),
+              //         boxShadow: [
+              //           BoxShadow(
+              //             color: Colors.black.withOpacity(0.2),
+              //             //offset: Offset(0, 4),
+              //             //blurRadius: 10,
+              //           ),
+              //         ],
+              //       ),
+              //       padding: const EdgeInsets.all(16.0),
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: <Widget>[
+              //           if (profile.imagePath != null)
+              //             ClipOval(
+              //               child: Image.asset(
+              //                 profile.imagePath!,
+              //                 height: 120,
+              //                 width: 120,
+              //                 fit: BoxFit.cover,
+              //               ),
+              //             ),
+              //           const SizedBox(height: 16),
+              //           Text(
+              //             'About Developer\n${profile.name}',
+              //             textAlign: TextAlign.center,
+              //             style: TextStyle(
+              //                 fontSize: 20, fontWeight: FontWeight.bold),
+              //           ),
+              //           if (profile.description != null) ...[
+              //             const SizedBox(height: 16),
+              //             Text(
+              //               profile.description!,
+              //               textAlign: TextAlign.center,
+              //               style: TextStyle(fontSize: 16),
+              //             ),
+              //           ],
+              //           const SizedBox(height: 30),
+              //           Text(
+              //             '(${profile.name})',
+              //             textAlign: TextAlign.start,
+              //             style: TextStyle(fontSize: 20, color: Colors.blueGrey),
+              //           ),
+              //           const SizedBox(height: 20),
+              //           if (profile.profileUrl != null)
+              //             ElevatedButton(
+              //               onPressed: () => setState(() {
+              //                 _launched = _abouturl(profile.profileUrl!);
+              //               }),
+              //               child: const Text('See more about me'),
+              //               style: ElevatedButton.styleFrom(
+              //                 backgroundColor: Colors.red,
+              //               ),
+              //             ),
+              //         ],
+              //       ),
+              //     );
+              //   },
+              // ),
             ],
           ),
         ),

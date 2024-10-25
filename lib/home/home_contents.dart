@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:robu/info_pages/video_play_screen.dart';
 import 'dart:ui';
 import '../themes/app_theme.dart';
 import 'banner_list_view.dart';
@@ -12,6 +13,63 @@ class HomeContents extends StatefulWidget {
 }
 
 class _HomeContentsState extends State<HomeContents> {
+
+  final List<String> ArduinovideoIds = [
+    'wfVmTObWe_k',
+    'SbjwXnaIAxk',
+    'TMxtvCgdz7k',
+    "SQANb88NyTg",
+    "InH5y6Nn2ik",
+    "WlNC6biRQ6M",
+    "KIDrfwxzWW4",
+    "tJJ8mavtbFk",
+    "onCcP5eCmxQ",
+    "SiwbL-Vkf9k",
+    "dEd6FAvWKgI"
+  ];
+  final List<String> ArduinovideoTitles = [
+    'Tutorial on Arduino',
+    'Tutorial on Ultrasonic Sensor',
+    'Tutorial on Single Channel Relay',
+    "Tutorial on MQ 2 Gas sensor",
+    "Tutorial on LED Blink using Analogue write and LED Fade",
+    "Tutorial on Led blink using Digital write",
+    "Tutorial on Jumper Wire",
+    "Tutorial on Buzzer",
+    "Tutorial on HC 05 Bluetooth Module",
+    "Tutorial on IR sensor",
+    "Tutorial on Breadboard Explanation"
+  ];
+
+
+  final List<String> GraphicsvideoIds = [
+    '8idQl1vjRes',
+    'jPo472Zpphs',
+    'eD5PXwWFkLU',
+    'va8ivjdD358',
+    'VRiEhtVzVEg'
+  ];
+  final List<String> GraphicsvideoTitles = [
+    'Basics of AI & PSo',
+    'Advanced of AI & PS also Basics of XD ',
+    '3D Modeling',
+    'Motion Graphics',
+    'Motion Graphics - Advanced'
+  ];
+
+
+  final List<String> EventsvideoIds = [
+    'B_27REnx8aY',
+    'DPZoAKiW1-U',
+    '8Fhyo6ul730',
+    "w27D1hJRQjs"
+  ];
+  final List<String> EventsvideoTitles = [
+    'Robotics Activity',
+    'Project Manifestation Spring 2K18 - Meet the Aurobot',
+    'Project Manifestation Fall 17',
+    "Joyjatra'50 Techfest Intro Video"
+  ];
 
   void navigateTo(Widget screen) {
     Navigator.push(
@@ -47,6 +105,7 @@ class _HomeContentsState extends State<HomeContents> {
                     child: Column(
                       children: <Widget>[
                         getBannerUI(context),
+                        getbuttonSection(),
                         Flexible(
                           child: getInfoSectionUI(),
                         ),
@@ -181,6 +240,105 @@ class _HomeContentsState extends State<HomeContents> {
       ],
     );
   }
+
+  Widget getbuttonSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            SizedBox(width: 16,),
+            Text(
+              "What's your favourite?",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+                letterSpacing: 0.27,
+                color: AppTheme.darkerText,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(width: 20),
+              buttonUi(
+                text: 'Arduino',
+                onPressed: () {
+                  navigateTo(CourseVideo(
+                      videoContent: ArduinovideoIds.join(","),
+                      videoTitle: ArduinovideoTitles.join(","),
+                  ),
+                  );
+                },
+              ),
+              SizedBox(width: 16),
+              buttonUi(
+                text: 'Graphics',
+                onPressed: () {
+                  navigateTo(
+                    CourseVideo(
+                    videoContent: GraphicsvideoIds.join(","),
+                    videoTitle: GraphicsvideoTitles.join(","),
+                  ),
+                  );
+                },
+              ),
+              SizedBox(width: 16),
+              buttonUi(
+                text: 'Events',
+                onPressed: () {
+                  navigateTo(
+                    CourseVideo(
+                      videoContent: EventsvideoIds.join(","),
+                      videoTitle: EventsvideoTitles.join(","),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+
+
+
+  Widget buttonUi({
+    required String text,
+    required VoidCallback onPressed,
+  }) {
+    return Container(
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50), // Rounded corners
+          ),
+          side: BorderSide(color: Colors.red), // Border color
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 12,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      ),
+    );
+  }
+
+
 }
 
 Widget getInfoSectionUI() {

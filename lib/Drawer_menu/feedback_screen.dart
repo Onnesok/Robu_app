@@ -11,106 +11,92 @@ class FeedbackScreen extends StatefulWidget {
 }
 
 class _FeedbackScreenState extends State<FeedbackScreen> {
-  late TextEditingController _feedback_controller;
-
+  late TextEditingController _feedbackController;
 
   @override
   void initState() {
     super.initState();
-    _feedback_controller = TextEditingController();
+    _feedbackController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _feedback_controller.dispose();
+    _feedbackController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: AppTheme.white,
-
       appBar: AppBar(
-        title: Text("Feedback"),
+        scrolledUnderElevation: 0.0,
+        title: const Text("Feedback"),
         centerTitle: true,
         backgroundColor: AppTheme.white,
       ),
-
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-
-              Container(
-                //padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 16, right: 16),
-                child: Image.asset(
-                  'assets/ui/feedbackImage.png',
-                  height: 250,
-                ),
+              Image.asset(
+                'assets/ui/feedbackImage.png',
+                height: 250,
               ),
-
-              Container(
-                padding: const EdgeInsets.only(top: 8),
-                child: const Text(
-                  'Your Feedback',
-                  style: AppTheme.headline,
-                ),
+              const SizedBox(height: 8),
+              const Text(
+                'Your Feedback',
+                style: AppTheme.headline,
               ),
-
-              Container(
-                padding: const EdgeInsets.only(top: 16),
-                child: const Text(
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Text(
                   'Give your best time for this moment.',
                   textAlign: TextAlign.center,
                   style: AppTheme.body1,
                 ),
               ),
-
               _buildComposer(),
-
-              const SizedBox(height: 50,),
-
-              Container(
-                width: MediaQuery.of(context).size.width * 0.7,
-                margin: EdgeInsets.only(bottom: 60),
-                child: ElevatedButton(
-                  onPressed: () {
-                    print(_feedback_controller.text);
-                    Fluttertoast.showToast(msg: "Feedback not integrated for dev version");
-                    _feedback_controller.clear();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 15,),
-                    backgroundColor: AppTheme.blueaccent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print(_feedbackController.text);
+                      Fluttertoast.showToast(msg: "Feedback not integrated for dev version");
+                      _feedbackController.clear();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      backgroundColor: AppTheme.blueaccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      elevation: 10,
+                      shadowColor: AppTheme.blueaccent.withOpacity(0.5),
                     ),
-                    elevation: 10,
-                    shadowColor: AppTheme.blueaccent.withOpacity(0.5),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const <Widget>[
-                      Icon(
-                        Icons.bubble_chart_outlined,
-                        color: AppTheme.white,
-                        size: 24,
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Send Feedback',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          overflow: TextOverflow.ellipsis,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const <Widget>[
+                        Icon(
+                          Icons.bubble_chart_outlined,
+                          color: AppTheme.white,
+                          size: 24,
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 10),
+                        Text(
+                          'Send Feedback',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -123,50 +109,38 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   Widget _buildComposer() {
     return Padding(
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Container(
         decoration: BoxDecoration(
           color: AppTheme.white,
           borderRadius: BorderRadius.circular(8),
           boxShadow: <BoxShadow>[
             BoxShadow(
-                color: AppTheme.grey.withOpacity(0.6),
-                offset: const Offset(4, 4),
-                blurRadius: 8,
+              color: AppTheme.grey.withOpacity(0.6),
+              offset: const Offset(4, 4),
+              blurRadius: 8,
             ),
           ],
         ),
-
         child: ClipRRect(
           borderRadius: BorderRadius.circular(25),
-
           child: Container(
-            padding: const EdgeInsets.all(4.0),
-            constraints: const BoxConstraints(
-                minHeight: 100,
-                maxHeight: 200,
-            ),
+            padding: const EdgeInsets.all(16.0),  // Increase padding here
             color: AppTheme.white,
-
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: TextField(
-                controller: _feedback_controller,
-                maxLines: null,
-                onChanged: (String txt) {},
-                textInputAction: TextInputAction.done,
-                style: const TextStyle(
-                  fontFamily: AppTheme.fontName,
-                  fontSize: 16,
-                  color: AppTheme.darkGrey,
-                ),
-
-                cursorColor: Colors.blue,
-
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Enter your feedback...'),
+            child: TextField(
+              controller: _feedbackController,
+              maxLines: null,
+              textInputAction: TextInputAction.done,
+              style: const TextStyle(
+                fontFamily: AppTheme.fontName,
+                fontSize: 16,
+                color: AppTheme.darkGrey,
+              ),
+              cursorColor: Colors.blue,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Enter your feedback...',
+                contentPadding: EdgeInsets.symmetric(vertical: 10),  // Vertical padding for text field content
               ),
             ),
           ),
@@ -174,4 +148,5 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       ),
     );
   }
+
 }

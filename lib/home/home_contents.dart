@@ -16,43 +16,45 @@ class _HomeContentsState extends State<HomeContents> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppTheme.nearlyWhite,
-      child: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/ui/background.png'),
-            fit: BoxFit.cover,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(AppBar().preferredSize.height),
+        child: appBar(),
+      ),
+      body: Material(
+        color: AppTheme.nearlyWhite,
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/ui/background.png'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Column(
-          children: <Widget>[
-            appBar(),
-            Expanded(
-              child: SingleChildScrollView(
-                physics: NeverScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: Column(
-                    children: <Widget>[
-                      getCategoryUI(context),
-                      Flexible(
-                        child: getInfoSectionUI(),
-                      ),
-                    ],
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: Column(
+                      children: <Widget>[
+                        getCategoryUI(context),
+                        Flexible(
+                          child: getInfoSectionUI(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
-
-///////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////
-  ////////////////////////////////////////////////
 
   Widget appBar() {
     return Center(
@@ -60,72 +62,94 @@ class _HomeContentsState extends State<HomeContents> {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
-            color: Colors.white
-                .withOpacity(0.5), // Adjust opacity for desired effect
-            child: SizedBox(
-              height: AppBar().preferredSize.height,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 8),
-                    child: SizedBox(
-                      width: AppBar().preferredSize.height - 8,
-                      height: AppBar().preferredSize.height - 8,
-                    ),
+            height: 100.0,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/ui/background.png'),
+                fit: BoxFit.fitWidth,
+              ),
+              color: Colors.white.withOpacity(0.5),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, left: 8),
+                  child: SizedBox(
+                    width: AppBar().preferredSize.height - 8,
+                    height: AppBar().preferredSize.height - 8,
                   ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Text(
-                            'ROBU',
-                            style: TextStyle(
-                              fontSize: 22,
-                              color: AppTheme.darkText,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-
-                        Container(
-                          margin: EdgeInsets.only(right: 20),
-                          child: Row(
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Ratul Hasan",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 20),
+                        child: Row(
+                          children: [
+                            ClipOval(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.blue,
+                                      Colors.lightBlueAccent
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
                                   ),
-                                  Text("phone number"),
-                                ],
-                              ),
-                              SizedBox(width: 5,),
-                              ClipOval(
-                                child: Image.asset("assets/dev/ratul.jpg",
-                                  height: 35,
-                                  width: 35,
-                                  fit: BoxFit.cover,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.25),
+                                      blurRadius: 8,
+                                      offset: Offset(2, 4),
+                                    ),
+                                  ],
+                                ),
+                                padding: EdgeInsets.all(10),
+                                // Adds balanced padding around the icon
+                                child: Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                  size: 20,
                                 ),
                               ),
-                              SizedBox(width: 10,),
-                              Transform.rotate(
-                                angle: 0.1,
-                                child: Icon(Icons.notifications_none_outlined),
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Container(
+                                margin: EdgeInsets.only(left: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "anonymous",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text("Status: User"),
+                                  ],
+                                ),
                               ),
-                            ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Container(
+                          margin: EdgeInsets.only(right: 20, top: 20),
+                          child: Transform.rotate(
+                            angle: 0.3,
+                            child: Icon(Icons.notifications_none_outlined),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -133,18 +157,20 @@ class _HomeContentsState extends State<HomeContents> {
     );
   }
 
-  ////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////
-  ////////////////////////////
   Widget getCategoryUI(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.only(top: 4.0, left: 18, right: 16),
-          child: Text(
-              ""),
+        CategoryListView(
+          callBack: () {
+            /* Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        CourseInfoScreen(categoryType: categoryType)),
+              ); */
+          },
         ),
         Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
@@ -152,37 +178,19 @@ class _HomeContentsState extends State<HomeContents> {
             children: <Widget>[
               getButtonUI(context, CategoryType.Controller,
                   isSelected: categoryType == CategoryType.Controller),
-              const SizedBox(
-                width: 16,
-              ),
+              const SizedBox(width: 16),
               getButtonUI(context, CategoryType.robotics,
                   isSelected: categoryType == CategoryType.robotics),
-              const SizedBox(
-                width: 16,
-              ),
+              const SizedBox(width: 16),
               getButtonUI(context, CategoryType.coding,
                   isSelected: categoryType == CategoryType.coding),
             ],
           ),
         ),
-        const SizedBox(
-          height: 16,
-        ),
-        CategoryListView(
-          callBack: () {
-/*            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      CourseInfoScreen(categoryType: categoryType)),
-            );*/
-          },
-        ),
       ],
     );
   }
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Widget getButtonUI(BuildContext context, CategoryType categoryTypeData,
       {bool isSelected = false}) {
     String txt = '';
@@ -196,9 +204,10 @@ class _HomeContentsState extends State<HomeContents> {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-            color: AppTheme.nearlyWhite,
-            borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            border: Border.all(color: Colors.redAccent.shade200)),
+          color: AppTheme.nearlyWhite,
+          borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+          border: Border.all(color: Colors.redAccent.shade200),
+        ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -209,24 +218,6 @@ class _HomeContentsState extends State<HomeContents> {
                 setState(() {
                   categoryType = categoryTypeData;
                 });
-                if (categoryTypeData == CategoryType.robotics) {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (context) =>
-                  //           RoboticsPage()),
-                  // );
-                } else if (categoryTypeData == CategoryType.coding) {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => coding()),
-                  // );
-                } else if (categoryTypeData == CategoryType.Controller) {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => controller_page()),
-                  // );
-                }
               }
             },
             child: Padding(
@@ -240,9 +231,7 @@ class _HomeContentsState extends State<HomeContents> {
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                     letterSpacing: 0.27,
-                    color: isSelected
-                        ? Colors.black87 //DesignCourseAppTheme.nearlyWhite
-                        : Colors.black87,
+                    color: isSelected ? Colors.black87 : Colors.black87,
                   ),
                 ),
               ),
@@ -253,7 +242,6 @@ class _HomeContentsState extends State<HomeContents> {
     );
   }
 }
-
 
 Widget getInfoSectionUI() {
   return Padding(

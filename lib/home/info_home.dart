@@ -109,7 +109,7 @@ class _Info_homeState extends State<Info_home>
               padding: const EdgeInsets.all(8),
               physics: const BouncingScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
+                crossAxisCount: 3,
                 mainAxisSpacing: 12.0,
                 crossAxisSpacing: 12.0,
                 childAspectRatio: 0.6,

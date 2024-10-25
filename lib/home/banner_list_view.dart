@@ -1,27 +1,32 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'lists.dart'; // Make sure to import your list file
+import 'lists.dart' as customList;
 
-class CategoryListView extends StatefulWidget {
-  const CategoryListView({required this.callBack, super.key});
+class BannerListView extends StatefulWidget {
+  const BannerListView({
+    required this.callBack,
+    super.key,
+  });
 
   final Function() callBack;
 
   @override
-  State<CategoryListView> createState() => _CategoryListViewState();
+  State<BannerListView> createState() => _BannerListViewState();
 }
 
-class _CategoryListViewState extends State<CategoryListView> with TickerProviderStateMixin {
+class _BannerListViewState extends State<BannerListView> with TickerProviderStateMixin {
   late final AnimationController animationController;
   late final ScrollController scrollController;
   late final Timer timer;
-  final double itemWidth = 280; // width of each item
+  final double itemWidth = 280;
 
   @override
   void initState() {
     super.initState();
     animationController = AnimationController(
-        duration: const Duration(milliseconds: 1500), vsync: this);
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
     animationController.forward();
 
     scrollController = ScrollController();
@@ -29,14 +34,17 @@ class _CategoryListViewState extends State<CategoryListView> with TickerProvider
       if (scrollController.hasClients) {
         double maxScrollExtent = scrollController.position.maxScrollExtent;
         double currentScrollPosition = scrollController.position.pixels;
-        double newPosition = currentScrollPosition + itemWidth-100;  /// here 100 disi for animation last porjonto nite
+        double newPosition = currentScrollPosition + itemWidth - 100;
 
         if (newPosition > maxScrollExtent) {
           newPosition = 0;
         }
 
-        scrollController.animateTo(newPosition,
-            duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+        scrollController.animateTo(
+          newPosition,
+          duration: const Duration(seconds: 1),
+          curve: Curves.easeInOut,
+        );
       }
     });
   }
@@ -70,26 +78,31 @@ class _CategoryListViewState extends State<CategoryListView> with TickerProvider
               return ListView.builder(
                 controller: scrollController,
                 padding: const EdgeInsets.only(right: 16, left: 16),
-                itemCount: Category.categoryList.length,
+                itemCount: customList.Banner.BannerList.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  final int count = Category.categoryList.length > 10
+                  final int count = customList.Banner.BannerList.length > 10
                       ? 10
-                      : Category.categoryList.length;
-                  final Animation<double> animation =
-                  Tween<double>(begin: 0.0, end: 1.0).animate(
-                      CurvedAnimation(
-                          parent: animationController,
-                          curve: Interval((1 / count) * index, 1.0,
-                              curve: Curves.fastOutSlowIn)));
+                      : customList.Banner.BannerList.length;
+                  final Animation<double> animation = Tween<double>(
+                    begin: 0.0,
+                    end: 1.0,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animationController,
+                      curve: Interval(
+                        (1 / count) * index,
+                        1.0,
+                        curve: Curves.fastOutSlowIn,
+                      ),
+                    ),
+                  );
 
-                  return CategoryView(
-                    category: Category.categoryList[index],
+                  return BannerView(
+                    banner: customList.Banner.BannerList[index],
                     animation: animation,
                     animationController: animationController,
-                    callback: () {
-                      widget.callBack();
-                    },
+                    callback: widget.callBack,
                   );
                 },
               );
@@ -101,9 +114,9 @@ class _CategoryListViewState extends State<CategoryListView> with TickerProvider
   }
 }
 
-class CategoryView extends StatelessWidget {
-  const CategoryView({
-    required this.category,
+class BannerView extends StatelessWidget {
+  const BannerView({
+    required this.banner,
     required this.animationController,
     required this.animation,
     required this.callback,
@@ -111,7 +124,7 @@ class CategoryView extends StatelessWidget {
   });
 
   final VoidCallback callback;
-  final Category category;
+  final customList.Banner banner;
   final AnimationController animationController;
   final Animation<double> animation;
 
@@ -124,31 +137,10 @@ class CategoryView extends StatelessWidget {
           opacity: animation,
           child: Transform(
             transform: Matrix4.translationValues(
-                100 * (1.0 - animation.value), 0.0, 0.0),
+              100 * (1.0 - animation.value), 0.0, 0.0,
+            ),
             child: GestureDetector(
-              onTap: () {
-                if (category.title == 'banner1') {
-                  // Navigator.push(
-                  // context,
-                  // MaterialPageRoute(builder: (context) => robotics_projects()),
-                  // );
-                } else if (category.title == 'banner2') {
-                  // Navigator.push(
-                  // context,
-                  // MaterialPageRoute(builder: (context) => coding_projects()),
-                  // );
-                } else if (category.title == 'banner3') {
-                  // Navigator.push(
-                  // context,
-                  // MaterialPageRoute(builder: (context) => hardware_projects()),
-                  // );
-                } else if (category.title == 'banner4') {
-                  // Navigator.push(
-                  // context,
-                  // MaterialPageRoute(builder: (context) => robu_projects()),
-                  // );
-                }
-              },
+              onTap: callback,
               child: SizedBox(
                 width: 280,
                 child: Stack(
@@ -157,7 +149,7 @@ class CategoryView extends StatelessWidget {
                       margin: const EdgeInsets.only(left: 5, right: 5),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(category.imagePath),
+                        child: Image.asset(banner.imagePath),
                       ),
                     ),
                   ],

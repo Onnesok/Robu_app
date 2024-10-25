@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:robu/Drawer_menu/about_screen.dart';
+import 'package:robu/info_pages/alumni.dart';
+import 'package:robu/info_pages/blood_bank.dart';
+import 'package:robu/info_pages/bor.dart';
+import 'package:robu/info_pages/events.dart';
 import 'package:robu/info_pages/panel.dart';
+import 'package:robu/info_pages/registration.dart';
 import 'lists.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Info_home extends StatefulWidget {
-  const Info_home({required this.callBack, Key? key,}) : super(key: key);
+class InfoHome extends StatefulWidget {
+  const InfoHome({
+    required this.callBack,
+    Key? key,
+  }) : super(key: key);
 
   final Function() callBack;
 
   @override
-  State<Info_home> createState() => _Info_homeState();
+  State<InfoHome> createState() => _InfoHomeState();
 }
 
-class _Info_homeState extends State<Info_home>
-    with TickerProviderStateMixin {
+class _InfoHomeState extends State<InfoHome> with TickerProviderStateMixin {
   late final AnimationController animationController;
   Future<void>? _launched;
 
@@ -55,51 +63,68 @@ class _Info_homeState extends State<Info_home>
     return true;
   }
 
-  void _onCategoryPressed(Category category) {
-    final Uri robu_web = Uri(scheme: 'https', host: 'www.bracurobu.org');
-    if (category.title == 'Basic of robotics') {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => bor()),
-      // );
-      //_launched = _Bor(toLaunch);
-    } else if (category.title == 'Events') {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => eventpage()),
-      // );
-    }else if (category.title == 'Blood bank') {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => blood_bank()),
-      // );
-    } else if (category.title == 'panel') {
-      navigateTo(Panel(),);
-    }
-    else if (category.title == 'Regestration') {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => Registration()),
-      // );
-    } else if (category.title == 'Announcements') {
-      /* Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AppDesignPage()),
-      );*/
-      _launched = _Bor(robu_web);
-    }else if (category.title == 'Alumni') {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => Alumni()),
-      // );
-    } else if (category.title == "About Robu") {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => AboutScreen()),
-      // );
+  void _onInfoUiPressed(InfoBlock info_ui) {
+    final Uri robuWeb = Uri(scheme: 'https', host: 'www.bracurobu.org');
+
+    final List<String> videoIds = [
+      'wfVmTObWe_k',
+      'SbjwXnaIAxk',
+      'TMxtvCgdz7k',
+      "SQANb88NyTg",
+      "InH5y6Nn2ik",
+      "WlNC6biRQ6M",
+      "KIDrfwxzWW4",
+      "tJJ8mavtbFk",
+      "onCcP5eCmxQ",
+      "SiwbL-Vkf9k",
+      "dEd6FAvWKgI"
+    ];
+    final List<String> videoTitles = [
+      'Tutorial on Arduino',
+      'Tutorial on Ultrasonic Sensor',
+      'Tutorial on Single Channel Relay',
+      "Tutorial on MQ 2 Gas sensor",
+      "Tutorial on LED Blink using Analogue write and LED Fade",
+      "Tutorial on Led blink using Digital write",
+      "Tutorial on Jumper Wire",
+      "Tutorial on Buzzer",
+      "Tutorial on HC 05 Bluetooth Module",
+      "Tutorial on IR sensor",
+      "Tutorial on Breadboard Explanation"
+    ];
+
+    if (info_ui.title == 'Basic of robotics') {
+      navigateTo(
+        Bor(
+            title: "Basic Of Robotics",
+            image: "assets/ui/robot1.png",
+            instructorName: "Robu",
+            duration: "TBA",
+            releaseDate: "TBA",
+            videoContent: videoIds.join(','),
+            description: "Join us for an immersive workshop designed to introduce participants to the fundamental concepts of robotics. This workshop is tailored for members of the Robotics Club of BRAC University, providing hands-on experience in various aspects of robotics.",
+            videoTitle: videoTitles.join(","),
+            prerequisite: "Become Robu Member"
+        ),
+      );
+    } else if (info_ui.title == 'Events') {
+      navigateTo(Events());
+    } else if (info_ui.title == 'Blood bank') {
+      navigateTo(BloodBank());
+    } else if (info_ui.title == 'panel') {
+      navigateTo(Panel());
+    } else if (info_ui.title == 'Registration') {
+      navigateTo(Registration());
+    } else if (info_ui.title == 'Announcements') {
+      _launched = _Bor(robuWeb);
+    } else if (info_ui.title == 'Alumni') {
+      navigateTo(Alumni());
+    } else if (info_ui.title == "About Robu") {
+      navigateTo(AboutScreen());
     }
   }
 
+  // Info grid code
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -117,12 +142,12 @@ class _Info_homeState extends State<Info_home>
                 crossAxisCount: 3,
                 mainAxisSpacing: 12.0,
                 crossAxisSpacing: 12.0,
-                childAspectRatio: 0.6,
+                childAspectRatio: 0.7,
               ),
               children: List<Widget>.generate(
-                Category.popularCourseList.length,
+                InfoBlock.InfoList.length,
                     (int index) {
-                  final int count = Category.popularCourseList.length;
+                  final int count = InfoBlock.InfoList.length;
                   final Animation<double> animation =
                   Tween<double>(begin: 0.0, end: 1.0).animate(
                     CurvedAnimation(
@@ -132,15 +157,12 @@ class _Info_homeState extends State<Info_home>
                     ),
                   );
                   animationController.forward();
-                  return CategoryView(
-                    callback: () {
-                      widget.callBack();
-                    },
-                    category: Category.popularCourseList[index],
+                  return InfoUi(
+                    callback: widget.callBack,
+                    info_ui: InfoBlock.InfoList[index],
                     animation: animation,
                     animationController: animationController,
-                    onPressed: () =>
-                        _onCategoryPressed(Category.popularCourseList[index]),
+                    onPressed: () => _onInfoUiPressed(InfoBlock.InfoList[index]),
                   );
                 },
               ),
@@ -152,11 +174,9 @@ class _Info_homeState extends State<Info_home>
   }
 }
 
-// category_view.dart
-
-class CategoryView extends StatelessWidget {
-  const CategoryView({
-    required this.category,
+class InfoUi extends StatelessWidget {
+  const InfoUi({
+    required this.info_ui,
     required this.animationController,
     required this.animation,
     required this.callback,
@@ -166,7 +186,7 @@ class CategoryView extends StatelessWidget {
 
   final VoidCallback callback;
   final VoidCallback onPressed;
-  final Category category;
+  final InfoBlock info_ui;
   final AnimationController animationController;
   final Animation<double> animation;
 
@@ -179,8 +199,7 @@ class CategoryView extends StatelessWidget {
           opacity: animation,
           child: Transform(
             transform: Matrix4.translationValues(
-                0.0, 50 * (1.0 - animation.value), 0.0
-            ),
+                0.0, 50 * (1.0 - animation.value), 0.0),
             child: Material(
               color: Colors.transparent,
               child: InkWell(
@@ -190,91 +209,48 @@ class CategoryView extends StatelessWidget {
                   callback();
                 },
                 child: Stack(
-                  //alignment: AlignmentDirectional.bottomCenter,
                   children: <Widget>[
                     Column(
                       children: <Widget>[
                         Expanded(
                           child: Ink(
-                            decoration: const BoxDecoration(
-                              //color: Color(0xFFF8FAFB),
+                            decoration: BoxDecoration(
                               color: Colors.white70,
-                              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                              borderRadius:
+                              const BorderRadius.all(Radius.circular(16.0)),
+                              border: Border.all(
+                                  color: Colors.grey.withOpacity(0.3)),
                             ),
-                            /////////////////////// from here ////////////////////////////
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 8, right: 8),
-                              child: Container(
-                                /*decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(16.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              child: Column(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(16.0)),
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Image.asset(info_ui.imagePath),
+                                    ),
                                   ),
-                                  *//*boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: DesignCourseAppTheme.grey.withOpacity(0.2), blurRadius: 6.0
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    info_ui.title,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      fontFamily: "WorkSans",
+                                      color: Colors.black87.withOpacity(0.7),
                                     ),
-                                  ],*//*
-                                ),*/
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey.withOpacity(0.2)),
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                ),
-                                child: Column(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius:
-                                      const BorderRadius.all(Radius.circular(16.0)),
-                                      child: AspectRatio(
-                                        aspectRatio: 1,
-                                        child: Image.asset(category.imagePath),
-                                      ),
-                                    ),
-                                    SizedBox(height: 10,),
-                                    Text(category.title,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12,
-                                        fontFamily: "WorkSans",
-                                        color: Colors.black87.withOpacity(0.7),
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
                               ),
                             ),
-                            /*Column(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 16, left: 16, right: 16),
-                                        child: Text(
-                                          category.title,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16,
-                                            letterSpacing: 0.27,
-                                            color: DesignCourseAppTheme
-                                                .darkerText,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),*/
                           ),
                         ),
                       ],
                     ),
-
-                    ///////////////////////////////////////////////////////////////////////////////
-
                   ],
                 ),
               ),

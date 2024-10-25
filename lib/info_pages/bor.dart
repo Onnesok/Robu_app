@@ -3,12 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:robu/info_pages/video_play_screen.dart';
 import 'package:robu/themes/app_theme.dart';
 import '../api/api_root.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'addEnrollment.dart';
 
 class Bor extends StatefulWidget {
   final int courseId;
@@ -18,9 +17,8 @@ class Bor extends StatefulWidget {
   final String discount;
   final String instructorName;
   final String duration;
-  final double price;
   final String releaseDate;
-  final String videoContent;  /// video id here and separated with coma ","
+  final String videoContent;  /// video id here and separated with coma "," in string format.... cse110 er slice mar :v
   final String description;
   final String videoTitle;
   final String prerequisite;
@@ -30,14 +28,13 @@ class Bor extends StatefulWidget {
 
   const Bor({
     super.key,
-    required this.courseId,   /// Most important ... yo
+    this.courseId = 0,
     required this.title,
     required this.image,
-    required this.stars,
+    this.stars = '5',
     this.discount = "No",
     required this.instructorName,
     required this.duration,
-    required this.price,
     required this.releaseDate,
     required this.videoContent,
     required this.description,
@@ -45,7 +42,7 @@ class Bor extends StatefulWidget {
     required this.prerequisite,
     this.ratingCount = 0000,
     this.certificate = "No",
-    this.introVideo = "lxRwEPvL-mQ",
+    this.introVideo = "1ENiVwk8idM",
   });
 
   @override
@@ -62,39 +59,6 @@ class _BorState extends State<Bor> with TickerProviderStateMixin {
   late YoutubePlayerController _controller;
   late final AnimationController animationController;
   late final Animation<double> animation;
-  bool isEnrolled = false;
-
-  Future<void> checkEnrollment(String email, int courseId, String video_title, String videoId) async {
-    final url = Uri.parse('${api_root}/check_enrollment.php');
-
-    try {
-      final response = await http.get(url.replace(queryParameters: {
-        'email': email,
-        'courseId': courseId.toString(),
-      }));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data['enrolled'] == 'yes') {
-          if (mounted) {
-            setState(() {
-              isEnrolled = true;
-            });
-          }
-        } else {
-          print("Not enrolled");  // Dont do anything
-        }
-      } else {
-        Fluttertoast.showToast(msg: 'Failed to check enrollment: ${response.statusCode}');
-        print('Error: ${response.statusCode} - ${response.body}');
-      }
-    } catch (e) {
-      Fluttertoast.showToast(msg: 'An error occurred: $e');
-      print('Exception: $e');
-    }
-  }
-
-
 
   @override
   void initState() {
@@ -136,9 +100,6 @@ class _BorState extends State<Bor> with TickerProviderStateMixin {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    //final profileProvider = Provider.of<ProfileProvider>(context);
-    //final email = profileProvider.email;
-    //checkEnrollment(email, widget.courseId, widget.videoTitle, widget.videoContent);
   }
 
   @override
@@ -183,8 +144,6 @@ class _BorState extends State<Bor> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    //final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
-    //final email = profileProvider.email;
 
     return Scaffold(
       backgroundColor: AppTheme.white,
@@ -444,54 +403,7 @@ class _BorState extends State<Bor> with TickerProviderStateMixin {
             child: child,
           );
         },
-        child: isEnrolled
-            ? Container(
-          key: ValueKey(1),
-          width: MediaQuery.of(context).size.width * 0.8, // More compact width
-          margin: const EdgeInsets.only(bottom: 16), // Space from the bottom
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20), // Padding for spacing
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.4),
-                offset: const Offset(0, 3),
-                spreadRadius: 4,
-                blurRadius: 10,
-              ),
-            ],
-          ),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green[800],
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
-            onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => CourseVideo(
-              //       videoContent: widget.videoContent,
-              //       videoTitle: widget.videoTitle,
-              //     ),
-              //   ),
-              // );
-            },
-            child: const Text(
-              'See Course',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        )
-            : AnimatedOpacity(
+        child: AnimatedOpacity(
           key: ValueKey(2),
           duration: const Duration(milliseconds: 500),
           opacity: opacity3,
@@ -514,41 +426,55 @@ class _BorState extends State<Bor> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    margin: const EdgeInsets.only(left: 8),
-                    child: widget.price != 0.0 ? Text(
-                      "Price: ${widget.price}",
-                      style: AppTheme.header_green.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ) : Text(
-                      "Free",
-                      style: AppTheme.header_green.copyWith(
-                        letterSpacing: 2,
-                      ),
-                    )
-                ),
-                Container(
                   margin: const EdgeInsets.only(bottom: 10, top: 10),
-                  width: MediaQuery.of(context).size.width * 0.5,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       elevation: 10,
-                      backgroundColor: AppTheme.blueaccent,
+                      backgroundColor: AppTheme.blueaccent.withOpacity(0.6),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     onPressed: () async{
-                      await addEnrollment(email, widget.courseId);
-                      await checkEnrollment(email, widget.courseId, widget.videoTitle, widget.videoContent);
-                      if (isEnrolled) {
-                        setState(() {});
-                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CourseVideo(
+                            videoContent: widget.videoContent,
+                            videoTitle: widget.videoTitle,
+                          ),
+                        ),
+                      );
                     },
                     child: const Text(
-                      'Join Course',
+                      'Start Course',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10, top: 10),
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 10,
+                      backgroundColor: AppTheme.blueaccent.withOpacity(0.6),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () async{
+                      Fluttertoast.showToast(msg: "Not accepting students for offline class right now");
+                    },
+                    child: const Text(
+                      'Register',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18,
@@ -565,42 +491,6 @@ class _BorState extends State<Bor> with TickerProviderStateMixin {
     );
   }
 
-  Widget wishlist() {
-    return Positioned(
-      top: (MediaQuery.of(context).size.width / 1.2) - 24.0 - 35,
-      right: 35,
-      child: ScaleTransition(
-        scale: CurvedAnimation(
-            parent: animationController, curve: Curves.fastOutSlowIn),
-        child: Card(
-          color: Colors.orange,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50.0)),
-          elevation: 10.0,
-          child: SizedBox(
-            width: 60,
-            height: 60,
-            child: Center(
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                  minimumSize: const Size(60, 60),
-                ),
-                onPressed: () {},
-                child: const Icon(
-                  Icons.favorite,
-                  color: Colors.white,
-                  size: 28,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget getTimeBoxUI(String text1, String txt2) {
     return Padding(

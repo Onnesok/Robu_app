@@ -64,7 +64,7 @@ class _InfoHomeState extends State<InfoHome> with TickerProviderStateMixin {
   }
 
   void _onInfoUiPressed(InfoBlock info_ui) {
-    final Uri robuWeb = Uri(scheme: 'https', host: 'www.bracurobu.org');
+    final Uri robuWeb = Uri(scheme: 'https', host: 'www.bracurobu.com');
 
     final List<String> videoIds = [
       'wfVmTObWe_k',

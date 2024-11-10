@@ -44,7 +44,7 @@ class InfoBlock {
     ),
     InfoBlock(
       imagePath: 'assets/ui/search_members.png',
-      title: 'Regestration',
+      title: 'Registration',
       lessonCount: 28,
       money: 208,
       rating: 4.9,

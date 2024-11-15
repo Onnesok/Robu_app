@@ -91,29 +91,43 @@ class Banner {
 
   static List<Banner> BannerList = <Banner>[
     Banner(
-      imagePath: 'assets/banner/robosub.jpg',
+      imagePath: 'assets/banner/recruitement.jpg',
       title: 'banner1',
       lessonCount: 15,
       money: 0,
       rating: 5,
     ),
     Banner(
+      imagePath: 'assets/banner/pusti.jpg',
+      title: 'banner2',
+      lessonCount: 15,
+      money: 0,
+      rating: 5,
+    ),
+    Banner(
+      imagePath: 'assets/banner/robosub.jpg',
+      title: 'banner3',
+      lessonCount: 15,
+      money: 0,
+      rating: 5,
+    ),
+    Banner(
       imagePath: 'assets/banner/test.jpg',
-      title: 'Coding projects',
+      title: 'banner4',
       lessonCount: 30,
       money: 0,
       rating: 5,
     ),
     Banner(
       imagePath: 'assets/banner/gallery.jpg',
-      title: 'Hardware projects',
+      title: 'banner5',
       lessonCount: 12,
       money: 0,
       rating: 5,
     ),
     Banner(
       imagePath: 'assets/banner/club_fair.jpg',
-      title: 'Robu projects',
+      title: 'banner6',
       lessonCount: 14,
       money: 0,
       rating: 5,

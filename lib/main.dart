@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       systemNavigationBarIconBrightness: Brightness.dark,
     ));
     return MaterialApp(
-      title: 'Custom Drawer',
+      title: 'Robu',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,

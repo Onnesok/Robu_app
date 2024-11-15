@@ -127,49 +127,58 @@ class _InfoHomeState extends State<InfoHome> with TickerProviderStateMixin {
   // Info grid code
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: FutureBuilder<bool>(
-        future: getData(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (!snapshot.hasData) {
-            return const SizedBox();
-          } else {
-            return GridView(
-              padding: const EdgeInsets.all(8),
-              physics: const BouncingScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 12.0,
-                crossAxisSpacing: 12.0,
-                childAspectRatio: 0.7,
-              ),
-              children: List<Widget>.generate(
-                InfoBlock.InfoList.length,
-                    (int index) {
-                  final int count = InfoBlock.InfoList.length;
-                  final Animation<double> animation =
-                  Tween<double>(begin: 0.0, end: 1.0).animate(
-                    CurvedAnimation(
-                      parent: animationController,
-                      curve: Interval((1 / count) * index, 1.0,
-                          curve: Curves.fastOutSlowIn),
+    return FutureBuilder<bool>(
+      future: getData(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox();
+        } else {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 8),
+              LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return GridView.builder(
+                    shrinkWrap: true, // Ensures GridView fits within its parent
+                    physics: const NeverScrollableScrollPhysics(), // Disables independent scrolling
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 12.0,
+                      crossAxisSpacing: 12.0,
+                      childAspectRatio: 0.7,
                     ),
-                  );
-                  animationController.forward();
-                  return InfoUi(
-                    callback: widget.callBack,
-                    info_ui: InfoBlock.InfoList[index],
-                    animation: animation,
-                    animationController: animationController,
-                    onPressed: () => _onInfoUiPressed(InfoBlock.InfoList[index]),
+                    itemCount: InfoBlock.InfoList.length,
+                    itemBuilder: (context, index) {
+                      final int count = InfoBlock.InfoList.length;
+                      final Animation<double> animation = Tween<double>(
+                        begin: 0.0,
+                        end: 1.0,
+                      ).animate(
+                        CurvedAnimation(
+                          parent: animationController,
+                          curve: Interval((1 / count) * index, 1.0,
+                              curve: Curves.fastOutSlowIn),
+                        ),
+                      );
+                      animationController.forward();
+
+                      return InfoUi(
+                        callback: widget.callBack,
+                        info_ui: InfoBlock.InfoList[index],
+                        animation: animation,
+                        animationController: animationController,
+                        onPressed: () =>
+                            _onInfoUiPressed(InfoBlock.InfoList[index]),
+                      );
+                    },
                   );
                 },
               ),
-            );
-          }
-        },
-      ),
+            ],
+          );
+        }
+      },
     );
   }
 }

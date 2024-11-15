@@ -4,6 +4,7 @@ import 'package:robu/Drawer_menu/help_screen.dart';
 import 'package:robu/Drawer_menu/home_screen.dart';
 import 'package:robu/Drawer_menu/invite_friend_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:robu/home/btm_appbar.dart';
 import 'package:robu/home/home_contents.dart';
 import '../custom_drawer/drawer_user_controller.dart';
 import '../custom_drawer/home_drawer.dart';
@@ -16,7 +17,7 @@ class NavigationHomeScreen extends StatefulWidget {
 }
 
 class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
-  Widget screenView = const HomeContents();
+  Widget screenView = const CustomBottomAppBar();
   DrawerIndex drawerIndex = DrawerIndex.home;
 
   @override
@@ -35,38 +36,28 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
 
   void changeIndex(DrawerIndex drawerIndexdata) {
     if (drawerIndex != drawerIndexdata) {
-      drawerIndex = drawerIndexdata;
-      if (drawerIndex == DrawerIndex.home) {
-        if (mounted) {
-          setState(() {
-            screenView = const HomeContents();
-          });
-        }
-      } else if (drawerIndex == DrawerIndex.help) {
-        if (mounted) {
-          setState(() {
+      setState(() {
+        drawerIndex = drawerIndexdata;
+
+        switch (drawerIndex) {
+          case DrawerIndex.home:
+            screenView = const CustomBottomAppBar();
+            break;
+          case DrawerIndex.help:
             screenView = const HelpScreen();
-          });
-        }
-      } else if (drawerIndex == DrawerIndex.feedback) {
-        if (mounted) {
-          setState(() {
+            break;
+          case DrawerIndex.feedback:
             screenView = const FeedbackScreen();
-          });
-        }
-      } else if (drawerIndex == DrawerIndex.invite) {
-        if (mounted) {
-          setState(() {
+            break;
+          case DrawerIndex.invite:
             screenView = const InviteFriend();
-          });
-        }
-      } else if (drawerIndex == DrawerIndex.about) {
-        if (mounted) {
-          setState(() {
+            break;
+          case DrawerIndex.about:
             screenView = const AboutScreen();
-          });
+            break;
         }
-      }
+      });
     }
   }
+
 }

@@ -78,6 +78,51 @@ class _HomeContentsState extends State<HomeContents> {
     );
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     backgroundColor: Colors.white,
+  //     appBar: PreferredSize(
+  //       preferredSize: Size.fromHeight(AppBar().preferredSize.height),
+  //       child: appBar(),
+  //     ),
+  //     body: Material(
+  //       color: AppTheme.nearlyWhite,
+  //       child: Container(
+  //         decoration: BoxDecoration(
+  //           image: DecorationImage(
+  //             image: AssetImage('assets/ui/background.png'),
+  //             fit: BoxFit.cover,
+  //           ),
+  //         ),
+  //         child: Column(
+  //           children: <Widget>[
+  //             Expanded(
+  //               child: SingleChildScrollView(
+  //                 //physics: NeverScrollableScrollPhysics(),
+  //                 child: SizedBox(
+  //                   height: MediaQuery.of(context).size.height,
+  //                   child: Column(
+  //                     children: <Widget>[
+  //                       getBannerUI(context),
+  //                       getbuttonSection(),
+  //                       getInfoSectionUI(context),
+  //                       // Flexible(
+  //                       //   child: getInfoSectionUI(context),
+  //                       // ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,33 +131,24 @@ class _HomeContentsState extends State<HomeContents> {
         preferredSize: Size.fromHeight(AppBar().preferredSize.height),
         child: appBar(),
       ),
-      body: Material(
-        color: AppTheme.nearlyWhite,
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/ui/background.png'),
-              fit: BoxFit.cover,
-            ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/ui/background.png'),
+            fit: BoxFit.cover,
           ),
+        ),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: NeverScrollableScrollPhysics(),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(
-                      children: <Widget>[
-                        getBannerUI(context),
-                        getbuttonSection(),
-                        Flexible(
-                          child: getInfoSectionUI(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              getBannerUI(context),
+              getbuttonSection(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: getInfoSectionUI(context),
               ),
             ],
           ),
@@ -120,6 +156,7 @@ class _HomeContentsState extends State<HomeContents> {
       ),
     );
   }
+
 
   Widget appBar() {
     return Center(
@@ -341,7 +378,7 @@ class _HomeContentsState extends State<HomeContents> {
 
 }
 
-Widget getInfoSectionUI() {
+Widget getInfoSectionUI(context) {
   return Padding(
     padding: const EdgeInsets.only(top: 0, left: 18, right: 16),
     child: Column(
@@ -358,10 +395,8 @@ Widget getInfoSectionUI() {
             color: AppTheme.darkerText,
           ),
         ),
-        Flexible(
-          child: InfoHome(
-            callBack: () {},
-          ),
+        InfoHome(
+          callBack: () {},
         ),
         SizedBox(height: 50,),
       ],

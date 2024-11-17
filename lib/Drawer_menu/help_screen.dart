@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:robu/url%20launcher/url_launcher.dart';
 
 import '../themes/app_theme.dart';
 
@@ -48,7 +49,7 @@ class _HelpScreenState extends State<HelpScreen> {
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: ElevatedButton(
                     onPressed: () {
-                      Fluttertoast.showToast(msg: "Coming soon");
+                      abouturl(Uri.parse("https://www.facebook.com/BRACU.Robotics.Club"));
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 15),

@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../themes/app_theme.dart';
 
@@ -63,9 +65,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async{
                       print(_feedbackController.text);
-                      Fluttertoast.showToast(msg: "Feedback not integrated for dev version");
+                      Fluttertoast.showToast(msg: "Feedback coming soon");
                       _feedbackController.clear();
                     },
                     style: ElevatedButton.styleFrom(

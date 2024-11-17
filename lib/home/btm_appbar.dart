@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:robu/home/home_contents.dart';
 import 'package:robu/info_pages/events.dart';
 import 'package:robu/themes/app_theme.dart';
+import 'package:robu/user_data/profile.dart';
 
 class CustomBottomAppBar extends StatefulWidget {
   const CustomBottomAppBar({super.key});
@@ -23,7 +24,7 @@ class _CustomBottomAppBarState extends State<CustomBottomAppBar> {
   Widget build(BuildContext context) {
     final List<Widget> widgetOptions = <Widget>[
       HomeContents(),
-      Events(),
+      Profile(),
     ];
 
     final bottomNavBarItems = const <BottomNavigationBarItem>[
@@ -49,7 +50,7 @@ class _CustomBottomAppBarState extends State<CustomBottomAppBar> {
           child: BottomNavigationBar(
             items: bottomNavBarItems,
             currentIndex: _selectedIndex,
-            selectedItemColor: AppTheme.blueaccent,
+            selectedItemColor: Colors.blue[700],
             unselectedItemColor: Colors.black87,
             onTap: _onItemTapped,
           ),

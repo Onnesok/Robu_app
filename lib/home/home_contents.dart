@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:robu/info_pages/video_play_screen.dart';
+import 'package:robu/user_data/profile_provider.dart';
 import 'dart:ui';
 import '../themes/app_theme.dart';
 import 'banner_list_view.dart';
@@ -78,51 +81,6 @@ class _HomeContentsState extends State<HomeContents> {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     backgroundColor: Colors.white,
-  //     appBar: PreferredSize(
-  //       preferredSize: Size.fromHeight(AppBar().preferredSize.height),
-  //       child: appBar(),
-  //     ),
-  //     body: Material(
-  //       color: AppTheme.nearlyWhite,
-  //       child: Container(
-  //         decoration: BoxDecoration(
-  //           image: DecorationImage(
-  //             image: AssetImage('assets/ui/background.png'),
-  //             fit: BoxFit.cover,
-  //           ),
-  //         ),
-  //         child: Column(
-  //           children: <Widget>[
-  //             Expanded(
-  //               child: SingleChildScrollView(
-  //                 //physics: NeverScrollableScrollPhysics(),
-  //                 child: SizedBox(
-  //                   height: MediaQuery.of(context).size.height,
-  //                   child: Column(
-  //                     children: <Widget>[
-  //                       getBannerUI(context),
-  //                       getbuttonSection(),
-  //                       getInfoSectionUI(context),
-  //                       // Flexible(
-  //                       //   child: getInfoSectionUI(context),
-  //                       // ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,6 +117,7 @@ class _HomeContentsState extends State<HomeContents> {
 
 
   Widget appBar() {
+    final profileProvider = Provider.of<ProfileProvider>(context);
     return Center(
       child: ClipRect(
         child: BackdropFilter(
@@ -210,7 +169,6 @@ class _HomeContentsState extends State<HomeContents> {
                                   ],
                                 ),
                                 padding: EdgeInsets.all(10),
-                                // Adds balanced padding around the icon
                                 child: Icon(
                                   Icons.person,
                                   color: Colors.white,
@@ -224,14 +182,15 @@ class _HomeContentsState extends State<HomeContents> {
                                 margin: EdgeInsets.only(left: 10),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "anonymous",
+                                      profileProvider.fullName,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text("Status: User"),
+                                    Text("${profileProvider.position ?? 'No position assigned'}"),
                                   ],
                                 ),
                               ),
@@ -244,7 +203,12 @@ class _HomeContentsState extends State<HomeContents> {
                           margin: EdgeInsets.only(right: 20, top: 20),
                           child: Transform.rotate(
                             angle: 0.3,
-                            child: Icon(Icons.notifications_none_outlined),
+                            child: IconButton(
+                              onPressed: () {
+                                Fluttertoast.showToast(msg: "Coming soon");
+                              },
+                                icon: Icon(Icons.notifications_none_outlined),
+                            ),
                           ),
                         ),
                       ),
@@ -359,9 +323,9 @@ class _HomeContentsState extends State<HomeContents> {
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50), // Rounded corners
+            borderRadius: BorderRadius.circular(50),
           ),
-          side: BorderSide(color: Colors.red), // Border color
+          side: BorderSide(color: Colors.red),
         ),
         child: Text(
           text,

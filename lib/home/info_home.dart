@@ -5,7 +5,7 @@ import 'package:robu/info_pages/blood_bank.dart';
 import 'package:robu/info_pages/bor.dart';
 import 'package:robu/info_pages/events.dart';
 import 'package:robu/info_pages/panel.dart';
-import 'package:robu/info_pages/registration.dart';
+import 'package:robu/login/registration.dart';
 import 'lists.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -114,7 +114,7 @@ class _InfoHomeState extends State<InfoHome> with TickerProviderStateMixin {
     } else if (info_ui.title == 'panel') {
       navigateTo(Panel());
     } else if (info_ui.title == 'Registration') {
-      navigateTo(Registration());
+      navigateTo(registration());
     } else if (info_ui.title == 'Announcements') {
       _launched = _Bor(robuWeb);
     } else if (info_ui.title == 'Alumni') {
@@ -141,7 +141,7 @@ class _InfoHomeState extends State<InfoHome> with TickerProviderStateMixin {
                 builder: (BuildContext context, BoxConstraints constraints) {
                   return GridView.builder(
                     shrinkWrap: true, // Ensures GridView fits within its parent
-                    physics: const NeverScrollableScrollPhysics(), // Disables independent scrolling
+                    physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       mainAxisSpacing: 12.0,

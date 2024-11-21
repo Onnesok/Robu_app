@@ -3,7 +3,7 @@ import 'package:robu/Drawer_menu/about_screen.dart';
 import 'package:robu/info_pages/alumni.dart';
 import 'package:robu/info_pages/blood_bank.dart';
 import 'package:robu/info_pages/bor.dart';
-import 'package:robu/info_pages/events.dart';
+import 'package:robu/info_pages/robust.dart';
 import 'package:robu/info_pages/panel.dart';
 import 'package:robu/login/registration.dart';
 import 'lists.dart';
@@ -107,8 +107,8 @@ class _InfoHomeState extends State<InfoHome> with TickerProviderStateMixin {
             prerequisite: "Become Robu Member"
         ),
       );
-    } else if (info_ui.title == 'Events') {
-      navigateTo(Events());
+    } else if (info_ui.title == 'Robust') {
+      navigateTo(Robust());
     } else if (info_ui.title == 'Blood bank') {
       navigateTo(BloodBank());
     } else if (info_ui.title == 'panel') {

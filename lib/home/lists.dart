@@ -22,8 +22,8 @@ class InfoBlock {
       rating: 4.8,
     ),
     InfoBlock(
-      imagePath: 'assets/ui/web.png',
-      title: 'Events',
+      imagePath: 'assets/ui/podcast.png',
+      title: 'Robust',
       lessonCount: 28,
       money: 208,
       rating: 4.9,

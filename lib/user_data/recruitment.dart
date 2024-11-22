@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:robu/themes/app_theme.dart';
 
-class Registration extends StatelessWidget {
-  const Registration({super.key});
+class Recruitment extends StatelessWidget {
+  const Recruitment({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Integrate submit api here
     return Scaffold(
-      backgroundColor: AppTheme.white,
-      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-        title: Text("Registration", style: TextStyle(color: Colors.black87)),
+        title: Text("Recruitment", style: TextStyle(color: Colors.black87)),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -23,9 +22,7 @@ class Registration extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
-        child: Text("Coming soon", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),),
-      ),
+      body: Center(child: Text("Nothing here")),
     );
   }
 }

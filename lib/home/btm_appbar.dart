@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:robu/home/home_contents.dart';
-import 'package:robu/info_pages/events.dart';
-import 'package:robu/themes/app_theme.dart';
 import 'package:robu/user_data/profile.dart';
 
 class CustomBottomAppBar extends StatefulWidget {

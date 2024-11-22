@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:robu/themes/app_theme.dart';
 
-class Events extends StatelessWidget {
-  const Events({super.key});
+class Dashboard extends StatelessWidget {
+  const Dashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.white,
-      extendBodyBehindAppBar: true,
+      // @TODO: integrate admin dashboard
+      backgroundColor: Colors.white,
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-        title: Text("Events", style: TextStyle(color: Colors.black87)),
+        title: Text("Dashboard", style: TextStyle(color: Colors.black87)),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -23,9 +22,7 @@ class Events extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
-        child: Text("Coming soon", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),),
-      ),
+      body: Center(child: Text("Nothing here")),
     );
   }
 }

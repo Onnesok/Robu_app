@@ -7,6 +7,7 @@ The **ROBU App** is designed for the Robotics Club of BRAC University (ROBU) to 
 ## Features
 
 - **Robotics Basics**: Learn about the fundamentals of robotics with categorized lessons.
+- **Podcast**: Listen to podcast from experts of robu.
 - **Events and Announcements**: Stay updated with the latest ROBU events and announcements.
 - **Blood Bank**: Find and connect with donors in the ROBU network.
 - **Registration**: Easy access to club registrations for events and memberships.

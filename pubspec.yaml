@@ -38,6 +38,11 @@ dependencies:
   jwt_decoder: ^2.0.1
   youtube_explode_dart: ^2.3.6
   just_audio: ^0.9.42
+  syncfusion_flutter_pdfviewer: ^27.2.4
+  sliding_up_panel: ^2.0.0+1
+  palette_generator: ^0.3.3+5
+  audio_service: ^0.18.15
+  flutter_local_notifications: ^18.0.1
 
 dev_dependencies:
   flutter_test:

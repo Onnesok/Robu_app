@@ -118,7 +118,7 @@ class _InfoHomeState extends State<InfoHome> with TickerProviderStateMixin {
     } else if (info_ui.title == 'Announcements') {
       _launched = _Bor(robuWeb);
     } else if (info_ui.title == 'Alumni') {
-      navigateTo(Alumni());
+      navigateTo(AlumniPage());
     } else if (info_ui.title == "About Robu") {
       navigateTo(AboutScreen());
     }

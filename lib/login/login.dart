@@ -10,7 +10,6 @@ import 'package:robu/themes/app_theme.dart';
 import 'package:robu/user_data/profile_provider.dart';
 
 import '../api/api_root.dart';
-// TODO: FIX backbutton issue
 
 class login extends StatefulWidget {
   const login({super.key});
@@ -64,7 +63,7 @@ class _loginState extends State<login> {
         } else {
           // Handle specific error codes with better user feedback
           final errorMsg = jsonDecode(response.body)['detail'] ?? "Failed to login.";
-          Fluttertoast.showToast(msg: "Login Failed..... Please try again");
+          Fluttertoast.showToast(msg: "Login Failed..... Please try again...");
           print("Login failed: $errorMsg");
         }
       } catch (e) {
@@ -138,9 +137,8 @@ class _loginState extends State<login> {
           'robu_department': robuDepartment,
         });
         print("Profile fetched");
-
         await profileProvider.updateLoginStatus(true);    // Saved that user is logged in right now ...  yo :D
-        _navigateTo(NavigationHomeScreen());
+        _navigateToRoot(NavigationHomeScreen());
       } else {
         // Handle unauthorized or other errors
         print("Error fetching profile: ${response.statusCode}");
@@ -150,7 +148,12 @@ class _loginState extends State<login> {
     }
   }
 
-
+  void _navigateToRoot(Widget page) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => page),
+          (Route<dynamic> route) => false,
+    );
+  }
 
   void _navigateTo(Widget page) {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => page));

@@ -197,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
               // List Tiles
               _buildOptionCard(Icons.person_outline_rounded, 'Edit Profile', () => _navigateTo(EditProfile())),
               _buildOptionCard(Icons.dashboard_customize_outlined, 'Dashboard', () => _navigateTo(Dashboard())),
-              _buildOptionCard(Icons.person_add_alt_outlined, 'SPRING 2025 Recruitment', () => _navigateTo(Recruitment())),
+              _buildOptionCard(Icons.person_add_alt_outlined, 'Recruitment', () => _navigateTo(Recruitment())),
               //_buildOptionCard(Icons.settings, 'Settings', () => {}),
               _buildOptionCard(Icons.logout, 'Logout', _signOut, textColor: Colors.red),
             ],

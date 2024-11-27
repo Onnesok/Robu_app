@@ -13,19 +13,19 @@ class Panel extends StatefulWidget {
 class _PanelState extends State<Panel> {
   final List<Profile> profiles = [
     Profile(
-      name: "Sajid Sohan",
-      position: "President",
-      imageUrl: 'assets/panel24/president.png',
-      description: "Details",
-      facebookUrl: 'https://www.facebook.com/sajid.sohan100700',
-      linkedInUrl: '#',
-    ),
-    Profile(
       name: "S M Minoor Karim",
-      position: "Vice President",
+      position: "President",
       imageUrl: 'assets/panel24/vice_president.png',
       description: "Details",
       facebookUrl: 'https://www.facebook.com/Minoor01',
+      linkedInUrl: '#',
+    ),
+    Profile(
+      name: "Sajid Sohan",
+      position: "Vice President",
+      imageUrl: 'assets/panel24/president.png',
+      description: "Details",
+      facebookUrl: 'https://www.facebook.com/sajid.sohan100700',
       linkedInUrl: '#',
     ),
     Profile(
@@ -89,7 +89,7 @@ class _PanelState extends State<Panel> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height * 0.8,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   image: DecorationImage(

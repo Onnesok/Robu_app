@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:robu/themes/app_theme.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Robust extends StatefulWidget {
   const Robust({Key? key}) : super(key: key);
@@ -14,142 +16,110 @@ class Robust extends StatefulWidget {
 class _RobustState extends State<Robust> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final YoutubeExplode _youtubeExplode = YoutubeExplode();
-  String? _status;
-  bool _isPlaying = false;
-  double _currentPosition = 0;
-  double _audioDuration = 1;
-  String? _thumbnailUrl;
-  int _currentVideoIndex = -1; // Setting to -1 to indicate no video is selected initially
-  List<dynamic> _videos = [];
+  final PanelController _panelController = PanelController();
 
-  // Keep track of play status for each video
-  List<bool> _isVideoPlaying = [];
-  List<bool> _isLoading = [];
+  List<dynamic> _videos = [];
+  int _currentVideoIndex = -1;
+  String? _currentThumbnail;
+  String? _currentVideoName;
+  bool _isPlaying = false;
+  bool _isLoading = true;
+  Color _backgroundColor = Color(0xff15292f); // Default background color :)
+  bool _isPanelExpanded = false;
 
   @override
   void initState() {
     super.initState();
     _fetchVideos();
     _audioPlayer.playerStateStream.listen((state) {
-      if (state.playing) {
-        setState(() {
-          _isPlaying = true;
-        });
-      } else {
-        setState(() {
-          _isPlaying = false;
-        });
-      }
+      setState(() {
+        _isPlaying = state.playing;
+      });
     });
   }
 
   Future<void> _fetchVideos() async {
-    const String jsonUrl = "https://onnesok.github.io/Host-api-dev/podcast.json";
+    const String jsonUrl =
+        "https://onnesok.github.io/Host-api-dev/podcast.json";
     try {
       final response = await http.get(Uri.parse(jsonUrl));
       if (response.statusCode == 200) {
         setState(() {
           _videos = json.decode(response.body);
-          // Initialize the play status for each video
-          _isVideoPlaying = List.generate(_videos.length, (index) => false);
-          // Initialize the loading state for each video
-          _isLoading = List.generate(_videos.length, (index) => false);
+          _isLoading = false;
         });
-      } else {
-        throw Exception("Failed to load videos");
       }
     } catch (e) {
+      print("Error fetching videos: $e");
       setState(() {
-        _status = "Error: $e";
+        _isLoading = false;
       });
     }
   }
 
-  Future<void> _playAudio(String url, {bool updateIndex = false}) async {
-    setState(() {
-      _status = "Loading...";
-      _isLoading[_currentVideoIndex] = true;
-    });
-
+  Future<void> _playAudio(
+      String url, String videoName, String? thumbnail) async {
     try {
-      if (url.isEmpty) {
-        throw Exception("Invalid YouTube URL");
-      }
-
       final videoId = VideoId(url);
-
-      // Fetch video details and thumbnail
-      final video = await _youtubeExplode.videos.get(videoId);
-      setState(() {
-        _thumbnailUrl = video.thumbnails.highResUrl;
-      });
-
-      final manifest = await _youtubeExplode.videos.streamsClient.getManifest(videoId);
+      final manifest =
+          await _youtubeExplode.videos.streamsClient.getManifest(videoId);
       final audioStreamInfo = manifest.audioOnly.withHighestBitrate();
 
-      if (audioStreamInfo == null) {
-        throw Exception("No audio stream found");
-      }
-
-      await _audioPlayer.setUrl(audioStreamInfo.url.toString());
-      _audioPlayer.play();
-
-      _audioPlayer.durationStream.listen((duration) {
+      if (audioStreamInfo != null) {
         setState(() {
-          _audioDuration = duration?.inSeconds.toDouble() ?? 1;
+          _isLoading = true;
         });
-      });
+        await _audioPlayer.setUrl(audioStreamInfo.url.toString());
+        _audioPlayer.play();
 
-      _audioPlayer.positionStream.listen((position) {
         setState(() {
-          _currentPosition = position.inSeconds.toDouble();
+          _currentThumbnail = thumbnail;
+          _currentVideoName = videoName;
+          _isLoading = false;
         });
-      });
 
-      if (updateIndex) {
+        // Extract dominant color from thumbnail and update background color
+        // if (thumbnail != null) {
+        //   _extractDominantColor(thumbnail);
+        // }
+
+        if (_panelController.isAttached && !_panelController.isPanelOpen) {
+          _panelController.open();
+        }
+      } else {
+        print("Audio stream is not available.");
         setState(() {
-          _status = "${_videos[_currentVideoIndex]["videoName"]}...";
-          _isVideoPlaying[_currentVideoIndex] = true;
-          _isLoading[_currentVideoIndex] = false;
+          _isLoading = false;
         });
       }
     } catch (e) {
+      print("Error playing audio: $e");
       setState(() {
-        _status = "Error: ${e.toString()}";
-        _isLoading[_currentVideoIndex] = false;
+        _isLoading = false;
       });
     }
   }
 
-  void _pauseAudio() {
-    _audioPlayer.pause();
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$minutes:$seconds";
+  }
+
+  // Method to handle when the panel is fully opened
+  void _onPanelOpened() {
     setState(() {
-      _isPlaying = false;
-      if (_currentVideoIndex != -1) {
-        _isVideoPlaying[_currentVideoIndex] = false;
-      }
+      _isPanelExpanded = true;
     });
   }
 
-  void _seekAudio(int seconds) {
-    final newPosition = _currentPosition + seconds;
-    if (newPosition > 0 && newPosition < _audioDuration) {
-      _audioPlayer.seek(Duration(seconds: newPosition.toInt()));
-    }
-  }
-
-  void _nextAudio() {
-    if (_currentVideoIndex < _videos.length - 1) {
-      _currentVideoIndex++;
-      _playAudio(_videos[_currentVideoIndex]["youtubeLink"], updateIndex: true);
-    }
-  }
-
-  void _previousAudio() {
-    if (_currentVideoIndex > 0) {
-      _currentVideoIndex--;
-      _playAudio(_videos[_currentVideoIndex]["youtubeLink"], updateIndex: true);
-    }
+  // Method to handle when the panel is closed
+  void _onPanelClosed() {
+    setState(() {
+      _isPanelExpanded = false;
+    });
   }
 
   @override
@@ -162,133 +132,251 @@ class _RobustState extends State<Robust> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppTheme.white,
       appBar: AppBar(
-        title: const Text("Robust", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.blueAccent,
-        elevation: 2,
+        scrolledUnderElevation: 0.0,
+        title: Text("Robust", style: TextStyle(color: Colors.black87)),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          color: Colors.black,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
-      body: _videos.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-        padding: const EdgeInsets.all(8.0),
-        itemCount: _videos.length,
-        itemBuilder: (context, index) {
-          final video = _videos[index];
-          final isCurrentCard = index == _currentVideoIndex;
-
-          return Card(
-            elevation: 4,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _currentVideoIndex = index;
-                      _playAudio(video["youtubeLink"], updateIndex: true);
-                    });
-                  },
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(12),
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        video["thumbnail"],
-                        fit: BoxFit.cover,
-                        width: 60,
-                        height: 60,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Text(
+              "Welcome to ROBU Podcast (ROBUST)",
+              style: AppTheme.body1,
+            ),
+          ),
+          Expanded(
+            child: SlidingUpPanel(
+              controller: _panelController,
+              minHeight: 130,
+              maxHeight: MediaQuery.of(context).size.height,
+              // Full screen height
+              color: Colors.transparent,
+              onPanelOpened: _onPanelOpened,
+              // Detect when panel is fully expanded
+              onPanelClosed: _onPanelClosed,
+              // Detect when panel is closed
+              panel: _buildPodcastPlayer(),
+              body: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(color: Colors.blue),
+                    )
+                  : ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16).copyWith(bottom: 230),
+                itemCount: _videos.length,
+                itemBuilder: (context, index) {
+                  final video = _videos[index];
+                  return Column(
+                    children: [
+                      Card(
+                        color: AppTheme.nearlyWhite,
+                        margin: const EdgeInsets.symmetric(vertical: 2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(12),
+                          leading: SizedBox(
+                            width: 60,
+                            height: 60,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.network(
+                                video["thumbnail"],
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value: loadingProgress.expectedTotalBytes != null
+                                          ? loadingProgress.cumulativeBytesLoaded /
+                                          (loadingProgress.expectedTotalBytes ?? 1)
+                                          : null,
+                                    ),
+                                  );
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  // Dummy image icon when image fails to load... handled :D
+                                  return Icon(
+                                    Icons.image_not_supported,
+                                    size: 60,
+                                    color: Colors.grey,
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          title: Text(
+                            video["videoName"],
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
+                          onTap: () {
+                            _currentVideoIndex = index;
+                            _playAudio(video["youtubeLink"], video["videoName"], video["thumbnail"]);
+                          },
+                        ),
                       ),
-                    ),
-                    title: Text(
-                      video["videoName"],
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    trailing: isCurrentCard
-                        ? null // No play button if this is the currently playing card
-                        : const Icon(Icons.play_arrow, color: Colors.blueAccent, size: 30),
+                      // Divider-like line
+                      Divider(
+                        color: Colors.blueAccent.withOpacity(0.3),
+                        thickness: 1,
+                        indent: 80,
+                        endIndent: 16,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPodcastPlayer() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [_backgroundColor, _backgroundColor.withOpacity(0.7)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            if (_isPanelExpanded && _currentThumbnail != null)
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 60,
+                    bottom: 16.0,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.network(
+                    _currentThumbnail!,
+                    height: 250,
+                    width: 250,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                if (isCurrentCard) ...[
-                  const Divider(height: 1),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (_isLoading[index])
-                              const CircularProgressIndicator(),
-                              SizedBox(width: 20,),
-                              Text(_status ?? "Playing..."),
-                            // ClipRRect(
-                            //   borderRadius: BorderRadius.circular(8),
-                            //   child: Image.network(
-                            //     _thumbnailUrl ?? video["thumbnail"],
-                            //     width: 50,
-                            //     height: 50,
-                            //     fit: BoxFit.cover,
-                            //   ),
-                            // ),
-                            // const SizedBox(width: 12),
-                            // Expanded(
-                            //   child: Text(
-                            //     _status ?? "Playing...",
-                            //     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                            //     overflow: TextOverflow.ellipsis,
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Slider(
-                          value: _currentPosition,
-                          max: _audioDuration,
-                          activeColor: Colors.blueAccent,
-                          inactiveColor: Colors.grey,
-                          onChanged: (value) => _audioPlayer.seek(Duration(seconds: value.toInt())),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.skip_previous, size: 30),
-                              color: Colors.blueAccent,
-                              onPressed: _previousAudio,
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.replay_10, size: 30),
-                              color: Colors.blueAccent,
-                              onPressed: () => _seekAudio(-10),
-                            ),
-                            IconButton(
-                              icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow, size: 30),
-                              color: Colors.blueAccent,
-                              onPressed: () {
-                                _isPlaying ? _pauseAudio() : _audioPlayer.play();
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.forward_10, size: 30),
-                              color: Colors.blueAccent,
-                              onPressed: () => _seekAudio(10),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.skip_next, size: 30),
-                              color: Colors.blueAccent,
-                              onPressed: _nextAudio,
-                            ),
-                          ],
-                        ),
-                      ],
+              ),
+            Text(
+              _currentVideoName ?? "Nothing playing",
+              style: AppTheme.title.copyWith(color: Colors.white, fontSize: 22),
+              textAlign: TextAlign.center,
+            ),
+            _isPanelExpanded ? Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text("PODCAST", style: AppTheme.body_grey.copyWith(letterSpacing: 2),),
+            ) : SizedBox(height: 0,),
+            const SizedBox(height: 8),
+            StreamBuilder<Duration>(
+              stream: _audioPlayer.positionStream,
+              builder: (context, snapshot) {
+                final position = snapshot.data ?? Duration.zero;
+                final duration = _audioPlayer.duration ?? Duration.zero;
+                return Column(
+                  children: [
+                    Slider(
+                      value: position.inSeconds.toDouble(),
+                      max: duration.inSeconds.toDouble(),
+                      activeColor: Colors.white,
+                      inactiveColor: Colors.white54,
+                      thumbColor: Colors.blueAccent,
+                      onChanged: (value) {
+                        _audioPlayer.seek(Duration(seconds: value.toInt()));
+                      },
                     ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _formatDuration(position),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            _formatDuration(duration),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.skip_previous,
+                      color: Colors.white, size: 30),
+                  onPressed: () {
+                    if (_currentVideoIndex > 0) {
+                      _currentVideoIndex--;
+                      _playAudio(
+                          _videos[_currentVideoIndex]["youtubeLink"],
+                          _videos[_currentVideoIndex]["videoName"],
+                          _videos[_currentVideoIndex]["thumbnail"]);
+                    }
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    _isPlaying ? Icons.pause : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 30,
                   ),
-                ],
+                  onPressed: () {
+                    if (_isPlaying) {
+                      _audioPlayer.pause();
+                    } else {
+                      _audioPlayer.play();
+                    }
+                  },
+                ),
+                IconButton(
+                  icon:
+                      const Icon(Icons.skip_next, color: Colors.white, size: 30),
+                  onPressed: () {
+                    if (_currentVideoIndex < _videos.length - 1) {
+                      _currentVideoIndex++;
+                      _playAudio(
+                          _videos[_currentVideoIndex]["youtubeLink"],
+                          _videos[_currentVideoIndex]["videoName"],
+                          _videos[_currentVideoIndex]["thumbnail"]);
+                    }
+                  },
+                ),
               ],
             ),
-          );
-        },
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }

@@ -205,7 +205,7 @@ class _RecruitmentState extends State<Recruitment> {
                           if ((_formKey.currentState?.validate() ?? false) && PrimaryDepartment != null && SecondaryDepartment != null) {
                             (profileProvider.position == null || profileProvider.position == "Not a Member")
                                 ? _ApplyToRobu()
-                                : Fluttertoast.showToast(msg: "You are already a member...");
+                                : Fluttertoast.showToast(msg: "You are already a member....");
                             // // add method mamma....
                           } else {
                             Fluttertoast.showToast(

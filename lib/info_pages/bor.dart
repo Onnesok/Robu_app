@@ -438,6 +438,9 @@ class _BorState extends State<Bor> with TickerProviderStateMixin {
                       ),
                     ),
                     onPressed: () async{
+                      if (_controller.value.isPlaying) {
+                        _controller.pause();
+                      }
                       Navigator.push(
                         context,
                         MaterialPageRoute(

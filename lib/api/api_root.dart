@@ -1,1 +1,1 @@
-const String api_root = "https://admin.bracurobu.com/api/";
+const String api_root = "https://admin.bracurobu.com/api";

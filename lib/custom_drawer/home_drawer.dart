@@ -128,7 +128,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     const Padding(
                       padding: EdgeInsets.only(top: 8, left: 4),
                       child: Text(
-                        'Robotics Club Of Bracu',
+                        'ROBOTICS CLUB OF BRACU',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: AppTheme.grey,

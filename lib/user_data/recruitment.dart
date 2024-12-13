@@ -89,10 +89,12 @@ class _RecruitmentState extends State<Recruitment> {
           Navigator.pop(context);
       } else {
         final errorResponse = jsonDecode(response.body);
-        Fluttertoast.showToast(msg: "Failed to update... Please try again...");
+        Fluttertoast.showToast(msg: "Failed to apply.... Not accepting response now...");
+        //Fluttertoast.showToast(msg: "Failed to update... Please try again...");
       }
     } catch (error) {
-      Fluttertoast.showToast(msg: "Error: $error");
+      Fluttertoast.showToast(msg: "Failed to apply.... Not accepting response now...");
+      //Fluttertoast.showToast(msg: "Error: $error");
     }
   }
 

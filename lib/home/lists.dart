@@ -91,6 +91,13 @@ class Banner {
 
   static List<Banner> BannerList = <Banner>[
     Banner(
+      imagePath: 'assets/banner/space.jpg',
+      title: 'space week',
+      lessonCount: 15,
+      money: 0,
+      rating: 5,
+    ),
+    Banner(
       imagePath: 'assets/banner/recruitement.jpg',
       title: 'banner1',
       lessonCount: 15,

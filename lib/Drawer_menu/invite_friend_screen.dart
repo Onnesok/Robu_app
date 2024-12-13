@@ -14,7 +14,7 @@ class _InviteFriendState extends State<InviteFriend> {
   void _shareContent() {
     print("share button tapped");
     Share.share(
-      'Check out this amazing platform! Get onboard and start exploring: https://github.com/Onnesok',
+      'Check out this amazing platform! Get onboard and start exploring: https://www.facebook.com/BRACU.Robotics.Club',
       subject: 'Invite to Join the Platform',
     );
   }

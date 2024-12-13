@@ -217,7 +217,7 @@ class _loginState extends State<login> {
                     height: 100,
                     width: 100,
                   ),
-            
+
                   const Text(
                     "Welcome Back!",
                     style: TextStyle(
@@ -285,16 +285,6 @@ class _loginState extends State<login> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Please enter your password";
-                              } else if (value.length < 8) {
-                                return "Password must be at least 8 characters long";
-                              } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                                return "Password must include at least one uppercase letter";
-                              } else if (!RegExp(r'[a-z]').hasMatch(value)) {
-                                return "Password must include at least one lowercase letter";
-                              } else if (!RegExp(r'\d').hasMatch(value)) {
-                                return "Password must include at least one number";
-                              } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-                                return "Password must include at least one special character";
                               }
                               return null;
                             },
@@ -366,31 +356,31 @@ class _loginState extends State<login> {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () {
-                                  _navigateTo(registration());
-                                },
-                                child: Text(
-                                  'Sign up',
-                                  style: TextStyle(
-                                    color: Colors.blue[800],
-                                    letterSpacing: 1,
-                                    fontWeight: FontWeight.bold,
-                                    shadows: [
-                                      Shadow(
-                                        color: Colors.blueAccent[200]!.withOpacity(0.6), // Outer glow
-                                        blurRadius: 20,
-                                      ),
-                                      Shadow(
-                                        color: Colors.blue[200]!.withOpacity(0.4), // Inner glow
-                                        blurRadius: 40,
-                                      ),
-                                      Shadow(
-                                        color: Colors.blue.withOpacity(0.2), // Subtle glow
-                                        blurRadius: 60,
-                                      ),
-                                    ],
-                                  ),
-                                )
+                                  onPressed: () {
+                                    _navigateTo(registration());
+                                  },
+                                  child: Text(
+                                    'Sign up',
+                                    style: TextStyle(
+                                      color: Colors.blue[800],
+                                      letterSpacing: 1,
+                                      fontWeight: FontWeight.bold,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.blueAccent[200]!.withOpacity(0.6), // Outer glow
+                                          blurRadius: 20,
+                                        ),
+                                        Shadow(
+                                          color: Colors.blue[200]!.withOpacity(0.4), // Inner glow
+                                          blurRadius: 40,
+                                        ),
+                                        Shadow(
+                                          color: Colors.blue.withOpacity(0.2), // Subtle glow
+                                          blurRadius: 60,
+                                        ),
+                                      ],
+                                    ),
+                                  )
                               ),
                             ],
                           ),
